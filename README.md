@@ -1,7 +1,7 @@
 # LearningWords
 Learning Words - java swing desktop application for learning foreign words.
 
-![Screenshot](https://raw.githubusercontent.com/7554732/LearningWords/screenshots/MultpleChoicePanel.jpg)
+![Screenshot](https://raw.githubusercontent.com/7554732/LearningWords/screenshots/MultpleChoicePanel.png)
 
 Application features:
 - Change Quiz direction
