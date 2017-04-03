@@ -260,13 +260,12 @@ public class CardEditorPanel extends JPanel{
 
 	        	//	delete cardName from DataBase and JList
 				try {
-					SqlConnection.resSet = SqlConnection.stmt.executeQuery("SELECT * FROM cards WHERE card="+cardName+";");
+					SqlConnection.resSet = SqlConnection.stmt.executeQuery("SELECT * FROM cards WHERE card='"+cardName+"';");
 					if(SqlConnection.resSet.next()==true){
-		    			SqlConnection.stmt.execute("DELETE FROM cards WHERE card="+cardName+";");
-		    			SqlConnection.stmt.execute("DELETE FROM words WHERE card="+cardName+";");
+		    			SqlConnection.stmt.execute("DELETE FROM cards WHERE card='"+cardName+"';");
+		    			SqlConnection.stmt.execute("DELETE FROM words WHERE card='"+cardName+"';");
 			            if (listModelCards.contains(cardName)==true) listModelCards.removeElement(cardName);
 		            	if (listModelLearningCards.contains(cardName)==true) listModelLearningCards.removeElement(cardName);
-		            	JOptionPane.showMessageDialog(mFrame, "Card Removed.", "information", JOptionPane.INFORMATION_MESSAGE);	
 						System.out.println("Delete card: " + cardName);
 						LearningWords.log.info("Delete card: " + cardName);
 					}
@@ -376,38 +375,49 @@ public class CardEditorPanel extends JPanel{
 		            	else{
 		            		cardName=file.getName();
 		            	}
+		            	
 		            	//	confirm cardName
-		            	String answ = (String)JOptionPane.showInputDialog(mFrame, "Import Card Name:","Card Name", JOptionPane.PLAIN_MESSAGE,null,null,cardName);
-
-						if (answ == null) {
-							return;
-						}
-						else if (answ.length() > 0) {
-							cardName=answ;
-						} 
+		            	String dlgCaption="Card Name";
+		            	do{
+			            	String answ = (String)JOptionPane.showInputDialog(mFrame, "Import Card Name:",dlgCaption, JOptionPane.PLAIN_MESSAGE,null,null,cardName);
+	
+							if (answ == null) {
+								return;
+							}
+							else if (answ.length() > 0) {
+								cardName=answ;
+							} 		
+							
+							if(listModelCards.contains(cardName)==true) dlgCaption=dlgCaption.concat(" ALLREADY EXIST !!!");
+		            	} while(listModelCards.contains(cardName)==true);
 		            	
 		            	// 	import in separate thread
 		            	class ImportThread extends Thread {
-		            		String inner_fileNameWithPath, inner_cardName;
-		            		ImportThread(String fileNameWithPath,String cardName){
-			            		inner_fileNameWithPath=fileNameWithPath;
-			            		inner_cardName=cardName;		            			
+		            		File file;
+		            		String cardName;
+		            		boolean result=false;
+		            		ImportThread(File arg_file,String arg_cardName){
+			            		file=arg_file;
+			            		cardName=arg_cardName;		            			
 		            		}
 	            	        public void run(){
-	            	          card.Import(inner_fileNameWithPath, inner_cardName);
+	            	        	result=card.Import(file, cardName);
 	            	        }
 		            	}
-		            	ImportThread import_thread = new ImportThread(fileNameWithPath,cardName);
+		            	ImportThread import_thread = new ImportThread(file,cardName);
 		            	import_thread.start();
 		            	btnImportCard.setText("Wait...");
 		            	btnImportCard.update(btnImportCard.getGraphics());
 		            	import_thread.join();
 		            	btnImportCard.setText("Import Card");
 		            	
-		            	if (listModelCards.contains(cardName)==false) listModelCards.addElement(cardName);
-						System.out.println("Card Import Complete: " + cardName);
-						LearningWords.log.info("Card Import Complete: " + cardName);
-		            	JOptionPane.showMessageDialog(mFrame, "Card Import Complete.", "information", JOptionPane.INFORMATION_MESSAGE);
+		            	if (import_thread.result==true) {
+		            		listModelCards.addElement(cardName);
+							System.out.println("Card Import Complete: " + cardName);
+							LearningWords.log.info("Card Import Complete: " + cardName);
+			            	JOptionPane.showMessageDialog(mFrame, "Card Import Complete.", "information", JOptionPane.INFORMATION_MESSAGE);
+		            	}
+		            	
 		            } else {
 		            	System.out.println("Import command cancelled by user.");
 		            }

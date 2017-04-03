@@ -16,3 +16,7 @@ Application features:
 - Select cards to learning
 - Translate words by Google
 - Import/Export card between XML file and SQLite Database
+
+Installation:
+- Download and Install latest JavaSE <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">www.oracle.com</a>
+- Download and Unzip application [here on github](https://github.com/7554732/LearningWords/downloads/LearningWords.1.01.zip) 

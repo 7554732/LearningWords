@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,7 +25,7 @@ public class CardImportExport {
 	
 //	Import from XML file to card in connected DataBase 
 	
-	public void Import(String fileName,String cardName){
+	public boolean Import(File fileName,String cardName){
 		String questionLang="en",answerLang="ru";
     	System.out.println(cardName+" Import <<< from "+fileName);
     	LearningWords.log.info(cardName+" Import <<< from "+fileName);
@@ -51,7 +52,7 @@ public class CardImportExport {
             
             //	add card cardName if not exist in DataBase 
 			try {
-				SqlConnection.resSet = SqlConnection.stmt.executeQuery("SELECT * FROM cards WHERE card="+cardName+";");
+				SqlConnection.resSet = SqlConnection.stmt.executeQuery("SELECT * FROM cards WHERE card='"+cardName+"';");
 				if(SqlConnection.resSet.next()==false){
 	    				SqlConnection.stmt.execute("INSERT INTO cards ('card','learning','questionLang','answerLang') VALUES ('"+cardName+"',0,'"+questionLang+"','"+answerLang+"');");
 				}
@@ -94,15 +95,17 @@ public class CardImportExport {
 	        		}
                 }
             }
-
+            return true;
         } 
 		catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			LearningWords.log.log(Level.WARNING, "newDocumentBuilder Error", e);
+			return false;
 		}
 		catch (SAXException | IOException e) {
 			e.printStackTrace();
 			LearningWords.log.log(Level.WARNING, "documentBuilder.parse Error", e);
+			return false;
 		}
 	}
 	
@@ -135,7 +138,7 @@ public class CardImportExport {
             
             //	add every pair question and answer of cardName from 'words' table connected DataBase to created subnode 'card'.
             //	then add it to root node
-			SqlConnection.resSet = SqlConnection.stmt.executeQuery("SELECT * FROM words WHERE card="+cardName+";");
+			SqlConnection.resSet = SqlConnection.stmt.executeQuery("SELECT * FROM words WHERE card='"+cardName+"';");
 			while(SqlConnection.resSet.next())
 			{
 				String question = SqlConnection.resSet.getString("question");

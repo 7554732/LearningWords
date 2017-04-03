@@ -61,7 +61,7 @@ public class WordEditorDialog extends JDialog {
 		public void saveData(String inner_cardName){
 			try {
 				//	delete all old values
-	    		SqlConnection.stmt.execute("DELETE FROM words WHERE card="+inner_cardName+";");
+	    		SqlConnection.stmt.execute("DELETE FROM words WHERE card='"+inner_cardName+"';");
 			} 
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -238,9 +238,16 @@ public class WordEditorDialog extends JDialog {
 		}		
 	}
 	
+//		create and set Title for WordEditorDialog
 	
-	public WordEditorDialog(JFrame owner, String cardName) {		
-		super(owner, "Card Name: "+cardName,true);	//	set caption
+	private String createTitle(String cardName){
+		String title="Card Name: "+cardName+" , Words: "+model.getRowCount();
+		this.setTitle(title);	//	set Title
+		return title;
+	}
+	
+	public WordEditorDialog(JFrame owner, String cardName) {	
+		super(owner);	
 		setLangHashMap();		
 		setBounds(100, 100, 435, 295);
 		getContentPane().setLayout(new BorderLayout());
@@ -271,6 +278,9 @@ public class WordEditorDialog extends JDialog {
 		
 		{			
 			model = new DialogTableModel(cardName);
+			
+			createTitle(cardName);	//	set Title
+			
 			//	add answer language JComboBox answerLang
 			{
 				answerLang.setModel(new DefaultComboBoxModel(langHashMap.keySet().toArray()));
@@ -312,6 +322,7 @@ public class WordEditorDialog extends JDialog {
 					{
 						model.insertRow(selectedRow,data);
 					}
+					createTitle(cardName);	//	set Title
 				}
 			});
 			GridBagConstraints gbcBtnAdd = new GridBagConstraints();
@@ -333,6 +344,7 @@ public class WordEditorDialog extends JDialog {
 					if(selectedRow!=-1){
 						model.removeRow(selectedRow);
 					}
+					createTitle(cardName);	//	set Title
 				}
 			});
 			GridBagConstraints gbcBtnDelete = new GridBagConstraints();

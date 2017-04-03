@@ -375,7 +375,7 @@ public class Lesson {
 		if(answerNumber>-1){
 			mFrame.multipleChoice.lblPervQuestion.setText("Perv Word : "+lstQuestion.get(answerNumber).question);
 			mFrame.multipleChoice.lblTranslate.setText("Translate : "+lstQuestion.get(answerNumber).answer);
-			mFrame.multipleChoice.lblStatistic.setText("Statistic : "+lstQuestion.get(answerNumber).score+" of "+wordMaxScore);				
+			mFrame.multipleChoice.lblScore.setText("Score : "+lstQuestion.get(answerNumber).score+" of "+wordMaxScore);				
 		}		
 	}
 

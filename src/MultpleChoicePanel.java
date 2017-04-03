@@ -10,7 +10,7 @@ public class MultpleChoicePanel extends JPanel {
 	public JLabel lblQuestionsNumber;
 	public JLabel lblPervQuestion;
 	public JLabel lblTranslate;
-	public JLabel lblStatistic;
+	public JLabel lblScore;
 	public JLabel lblCardStatistic;
 	public JButton btnNextWord;
 	public JList lstAnswer;
@@ -139,13 +139,13 @@ public class MultpleChoicePanel extends JPanel {
 		gbcLblTranslate.gridy = 2;
 		panelRight.add(lblTranslate, gbcLblTranslate);
 		
-		lblStatistic = new JLabel("Statistic");
-		GridBagConstraints gbcLblStatistic = new GridBagConstraints();
-		gbcLblStatistic.anchor = GridBagConstraints.NORTHWEST;
-		gbcLblStatistic.insets = new Insets(0, 0, 5, 0);
-		gbcLblStatistic.gridx = 0;
-		gbcLblStatistic.gridy = 3;
-		panelRight.add(lblStatistic, gbcLblStatistic);
+		lblScore = new JLabel("Score");
+		GridBagConstraints gbcLblScore = new GridBagConstraints();
+		gbcLblScore.anchor = GridBagConstraints.NORTHWEST;
+		gbcLblScore.insets = new Insets(0, 0, 5, 0);
+		gbcLblScore.gridx = 0;
+		gbcLblScore.gridy = 3;
+		panelRight.add(lblScore, gbcLblScore);
 		
 		JSeparator separator = new JSeparator();
 		GridBagConstraints gbcSeparator = new GridBagConstraints();
