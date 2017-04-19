@@ -16,6 +16,7 @@ public class MainFrame extends JFrame {
 	public OptionsPanel options;
 	public CardEditorPanel cardEditor;
 	public WindowFocusListener mFrameWindowFocusListener;
+	public JTabbedPane tabbedPane;
 	
 //	Create the frame.
 	
@@ -24,7 +25,6 @@ public class MainFrame extends JFrame {
 		mFrameWindowFocusListener = new WindowFocusListener() {
 			//	on focus skip waiting and go to lesson
 			public void windowGainedFocus(WindowEvent arg0) {
-				Lesson.nextLesson.cancel();
 				removeWindowFocusListener(mFrameWindowFocusListener);
 				System.out.println("windowGainedFocus");
 				Lesson.nextCard();
@@ -62,7 +62,7 @@ public class MainFrame extends JFrame {
 		contentPane.setLayout(gblContentPane);
 		
 		//	create JTabbedPane
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		GridBagConstraints gbcTabbedPane = new GridBagConstraints();
 		gbcTabbedPane.fill = GridBagConstraints.BOTH;
 		gbcTabbedPane.gridx = 0;

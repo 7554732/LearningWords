@@ -170,7 +170,6 @@ public class Lesson {
 			LearningWords.log.log(Level.SEVERE, "SQL executeQuery Error", e);
             System.exit(1);
 		}			
-		currentQuestionsNumber=0;
         System.out.println("currentCard : "+currentCard+" questionLang "+questionLang+" answerLang "+answerLang);
         LearningWords.log.info("currentCard : "+currentCard);
 		mFrame.multipleChoice.lblCard.setText("Card : "+currentCard);		
@@ -330,6 +329,8 @@ public class Lesson {
 	        	e.printStackTrace();
 				LearningWords.log.log(Level.WARNING, "Play sound Error", e);
 	        }
+	        //	Set active MultpleChoicePanel
+	        mFrame.tabbedPane.setSelectedIndex(0);
 	        //	Restore Window
 	        mFrame.setExtendedState(JFrame.NORMAL);
 		}
@@ -517,6 +518,28 @@ public class Lesson {
 		}				
 	}
 	
+//	not count as answer pressing button "Next Card"
+	
+	public static void decreaseCurQuestionsNumber(){
+		if(currentQuestionsNumber>0) currentQuestionsNumber--;
+	}
+	
+//	schedule start Next Lesson after repeatTime
+	
+	public static void scheduleNextLesson(){
+		currentQuestionsNumber=0;	
+        // Pause before Next Lesson 
+        nextLesson = new NextLessonTask();
+		//	input Time to Pause before the Next Lesson
+        nextLesson.inputRepeatTime();
+        timer.schedule(nextLesson, repeatTime*60000);
+        timer.schedule(new TimerTask(){
+        	public void run(){
+	            mFrame.addWindowFocusListener(mFrame.mFrameWindowFocusListener);
+            }
+        },1000);
+	}
+	
 //		Crate new Question
 	
 	public static void makeQueastion(){	
@@ -534,19 +557,11 @@ public class Lesson {
 
 	//	check statistic and next card if this is learned
 		if(checkCardStatistic()) return;
-				
+	
+	//	schedule Next Lesson
 		if(currentQuestionsNumber>=questionsNumber){
-			currentQuestionsNumber=0;	
-            // Pause before Next Lesson 
-            nextLesson = new NextLessonTask();
-			//	input Time to Pause before the Next Lesson
-            nextLesson.inputRepeatTime();
-            timer.schedule(nextLesson, repeatTime*60000);
-            timer.schedule(new TimerTask(){
-            	public void run(){
-    	            mFrame.addWindowFocusListener(mFrame.mFrameWindowFocusListener);
-	            }
-            },1000);
+			scheduleNextLesson();
+            return;
 		}		
 		
 		//	sort the words by score

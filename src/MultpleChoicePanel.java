@@ -69,7 +69,8 @@ public class MultpleChoicePanel extends JPanel {
 		lstAnswer.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lstAnswerMouseListener = new MouseAdapter() {
 			public void mouseReleased(MouseEvent arg0) {
-					Lesson.checkAnswer();	
+				if(Lesson.nextLesson!=null) Lesson.nextLesson.cancel();	
+				Lesson.checkAnswer();	
 			}
 		};
 		lstAnswer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -176,6 +177,7 @@ public class MultpleChoicePanel extends JPanel {
 		btnNextCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Lesson.nextCard();
+				Lesson.decreaseCurQuestionsNumber();
 				Lesson.makeQueastion();
 			}
 		});

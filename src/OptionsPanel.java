@@ -4,6 +4,8 @@ import java.util.logging.Level;
 import javax.swing.*;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class OptionsPanel  extends JPanel {
@@ -13,9 +15,9 @@ public class OptionsPanel  extends JPanel {
 	
 	OptionsPanel(MainFrame mFrame) {
 		GridBagLayout gbl_options = new GridBagLayout();
-		gbl_options.columnWidths = new int[]{10, 155, 108, 0};
+		gbl_options.columnWidths = new int[]{10, 155, 108, 0, 0};
 		gbl_options.rowHeights = new int[] {30, 0, 0, 0, 0, 0};
-		gbl_options.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_options.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_options.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		this.setLayout(gbl_options);
 		
@@ -42,11 +44,25 @@ public class OptionsPanel  extends JPanel {
 		};
 		textFieldRepeatTime.addCaretListener(textFieldRepeatTimeCaretListener);
 		GridBagConstraints gbcTextField = new GridBagConstraints();
-		gbcTextField.insets = new Insets(0, 0, 5, 0);
+		gbcTextField.insets = new Insets(0, 0, 5, 5);
 		gbcTextField.gridx = 2;
 		gbcTextField.gridy = 1;
 		this.add(textFieldRepeatTime, gbcTextField);
 		textFieldRepeatTime.setColumns(10);
+		
+		JButton btnScheduleNextLesson = new JButton("<html>&nbsp;&nbsp;Schedule<br>Next Lesson");
+		btnScheduleNextLesson.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(Lesson.nextLesson!=null) Lesson.nextLesson.cancel();	
+				Lesson.scheduleNextLesson();
+			}
+		});
+		GridBagConstraints gbc_btnScheduleNextLesson = new GridBagConstraints();
+		gbc_btnScheduleNextLesson.insets = new Insets(0, 0, 5, 0);
+		gbc_btnScheduleNextLesson.gridx = 3;
+		gbc_btnScheduleNextLesson.gridy = 1;
+		gbc_btnScheduleNextLesson.gridheight = 2;
+		add(btnScheduleNextLesson, gbc_btnScheduleNextLesson);
 		
 		JLabel lblQuestionInSession = new JLabel("Questions in Lesson");
 		GridBagConstraints gbcLblQuestionInSession = new GridBagConstraints();
@@ -71,7 +87,7 @@ public class OptionsPanel  extends JPanel {
 			}
 		});
 		GridBagConstraints gbcQuestionsNumber = new GridBagConstraints();
-		gbcQuestionsNumber.insets = new Insets(0, 0, 5, 0);
+		gbcQuestionsNumber.insets = new Insets(0, 0, 5, 5);
 		gbcQuestionsNumber.gridx = 2;
 		gbcQuestionsNumber.gridy = 2;
 		this.add(textFieldQuestionsNumber, gbcQuestionsNumber);
@@ -99,7 +115,7 @@ public class OptionsPanel  extends JPanel {
 			}
 		});
 		GridBagConstraints gbcTextFieldWordMaxScore = new GridBagConstraints();
-		gbcTextFieldWordMaxScore.insets = new Insets(0, 0, 5, 0);
+		gbcTextFieldWordMaxScore.insets = new Insets(0, 0, 5, 5);
 		gbcTextFieldWordMaxScore.gridx = 2;
 		gbcTextFieldWordMaxScore.gridy = 3;
 		add(textFieldWordMaxScore, gbcTextFieldWordMaxScore);
@@ -127,6 +143,7 @@ public class OptionsPanel  extends JPanel {
 			}
 		});
 		GridBagConstraints gbcTextFieldCardMaxStatistic = new GridBagConstraints();
+		gbcTextFieldCardMaxStatistic.insets = new Insets(0, 0, 0, 5);
 		gbcTextFieldCardMaxStatistic.gridx = 2;
 		gbcTextFieldCardMaxStatistic.gridy = 4;
 		add(textFieldCardMaxStatistic, gbcTextFieldCardMaxStatistic);
