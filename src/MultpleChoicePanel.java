@@ -69,7 +69,10 @@ public class MultpleChoicePanel extends JPanel {
 		lstAnswer.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lstAnswerMouseListener = new MouseAdapter() {
 			public void mouseReleased(MouseEvent arg0) {
-				if(Lesson.nextLesson!=null) Lesson.nextLesson.cancel();	
+				if(Lesson.nextLesson!=null){
+					Lesson.titleTask.restoreTitle();	
+					Lesson.nextLesson.cancel();	
+				}
 				Lesson.checkAnswer();	
 			}
 		};

@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.awt.Toolkit;
 
 public class MainFrame extends JFrame {
 
@@ -17,10 +18,14 @@ public class MainFrame extends JFrame {
 	public CardEditorPanel cardEditor;
 	public WindowFocusListener mFrameWindowFocusListener;
 	public JTabbedPane tabbedPane;
+	static public String title="Learning Words";
 	
 //	Create the frame.
 	
 	public MainFrame() {
+		//	set custom icon
+		ImageIcon img = new ImageIcon("res/learning_words.gif");
+		setIconImage(img.getImage());
 		
 		mFrameWindowFocusListener = new WindowFocusListener() {
 			//	on focus skip waiting and go to lesson
@@ -43,7 +48,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		setTitle("Learning Words");
+		setTitle(title);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 450, 310);
 		

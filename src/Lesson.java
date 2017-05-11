@@ -73,6 +73,7 @@ public class Lesson {
 
 	private static Timer timer = new Timer();
 	public static NextLessonTask nextLesson;	
+	public static TitleTask titleTask;	
 	
 	private static GoogleTranslator googleTranslatort = null;	
 	private static HttpURLConnection connToSpeech=null;
@@ -335,7 +336,7 @@ public class Lesson {
 	        mFrame.setExtendedState(JFrame.NORMAL);
 		}
 	
-//	Confirm with Input Dialog value of repeatTime
+		//	Confirm with Input Dialog value of repeatTime
 	
 		public void inputRepeatTime(){
 			String value=null;
@@ -354,6 +355,29 @@ public class Lesson {
 			
 			mFrame.options.textFieldRepeatTime.addCaretListener(mFrame.options.textFieldRepeatTimeCaretListener);
 	        mFrame.setExtendedState(JFrame.ICONIFIED); 
+		}
+	}
+
+//	set to the mFrame Title number minutes left to the next lesson
+	
+	public static class TitleTask extends TimerTask{
+		
+		public void run(){
+			Date curDate=new Date();
+			if(nextLesson!=null){
+				long minToLesson=(nextLesson.scheduledExecutionTime()-curDate.getTime())/60000;
+				if(minToLesson>0){
+					mFrame.setTitle(mFrame.title+", "+minToLesson+" minutes left to the lesson");
+				}
+				else{
+					restoreTitle();
+				}					
+			}
+		}
+		
+		public void restoreTitle(){
+			mFrame.setTitle(mFrame.title);	
+			this.cancel();			
 		}
 	}
 
@@ -528,11 +552,19 @@ public class Lesson {
 	
 	public static void scheduleNextLesson(){
 		currentQuestionsNumber=0;	
+		// cancel previous pause and title time indication
+		if(Lesson.nextLesson!=null) Lesson.nextLesson.cancel();	
+		if(Lesson.titleTask!=null) Lesson.titleTask.cancel();	
+		
         // Pause before Next Lesson 
         nextLesson = new NextLessonTask();
 		//	input Time to Pause before the Next Lesson
         nextLesson.inputRepeatTime();
         timer.schedule(nextLesson, repeatTime*60000);
+        //	indicate time to next Lesson
+        titleTask = new TitleTask();
+        timer.schedule(titleTask, 1000,60000);
+        
         timer.schedule(new TimerTask(){
         	public void run(){
 	            mFrame.addWindowFocusListener(mFrame.mFrameWindowFocusListener);

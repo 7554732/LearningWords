@@ -53,7 +53,6 @@ public class OptionsPanel  extends JPanel {
 		JButton btnScheduleNextLesson = new JButton("<html>&nbsp;&nbsp;Schedule<br>Next Lesson");
 		btnScheduleNextLesson.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(Lesson.nextLesson!=null) Lesson.nextLesson.cancel();	
 				Lesson.scheduleNextLesson();
 			}
 		});
