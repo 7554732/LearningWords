@@ -251,30 +251,36 @@ public class CardEditorPanel extends JPanel{
 			public void actionPerformed(ActionEvent arg0) {
 				String cardName=null;
 				//	get selected cardName	
-				if(listCards.isSelectionEmpty()==false){
-					cardName=listCards.getSelectedValue();
+				if(listCards.isSelectionEmpty()==true){
+	            	JOptionPane.showMessageDialog(mFrame, "Select Card.", "Empty Selection", JOptionPane.WARNING_MESSAGE);
+					return;
 				}
-				else{
-	            	JOptionPane.showMessageDialog(mFrame, "Select Card.", "Empty Selection", JOptionPane.WARNING_MESSAGE);						
+				else{						
+					cardName=listCards.getSelectedValue();
+	            	Integer dialogAnswer = JOptionPane.showConfirmDialog(mFrame, "Delete " + cardName + " Card?", "Delete confirmation", JOptionPane.YES_NO_OPTION);
+		        	if (dialogAnswer != JOptionPane.YES_OPTION) {
+						return;		        		
+		        	}
+	            	
+	            	//	delete cardName from DataBase and JList
+					try {
+						SqlConnection.resSet = SqlConnection.stmt.executeQuery("SELECT * FROM cards WHERE card='"+cardName+"';");
+						if(SqlConnection.resSet.next()==true){
+			    			SqlConnection.stmt.execute("DELETE FROM cards WHERE card='"+cardName+"';");
+			    			SqlConnection.stmt.execute("DELETE FROM words WHERE card='"+cardName+"';");
+				            if (listModelCards.contains(cardName)==true) listModelCards.removeElement(cardName);
+			            	if (listModelLearningCards.contains(cardName)==true) listModelLearningCards.removeElement(cardName);
+							System.out.println("Delete card: " + cardName);
+							LearningWords.log.info("Delete card: " + cardName);
+						}
+					} 
+	    			catch (SQLException e) {
+						e.printStackTrace();
+						LearningWords.log.log(Level.SEVERE, "SQL executeQuery Error", e);
+			            System.exit(1);
+					}
 				}
 
-	        	//	delete cardName from DataBase and JList
-				try {
-					SqlConnection.resSet = SqlConnection.stmt.executeQuery("SELECT * FROM cards WHERE card='"+cardName+"';");
-					if(SqlConnection.resSet.next()==true){
-		    			SqlConnection.stmt.execute("DELETE FROM cards WHERE card='"+cardName+"';");
-		    			SqlConnection.stmt.execute("DELETE FROM words WHERE card='"+cardName+"';");
-			            if (listModelCards.contains(cardName)==true) listModelCards.removeElement(cardName);
-		            	if (listModelLearningCards.contains(cardName)==true) listModelLearningCards.removeElement(cardName);
-						System.out.println("Delete card: " + cardName);
-						LearningWords.log.info("Delete card: " + cardName);
-					}
-				} 
-    			catch (SQLException e) {
-					e.printStackTrace();
-					LearningWords.log.log(Level.SEVERE, "SQL executeQuery Error", e);
-		            System.exit(1);
-				}
 			}
 		});
 		GridBagConstraints gbcBtnDelCard = new GridBagConstraints();
